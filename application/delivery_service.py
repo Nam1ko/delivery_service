@@ -89,6 +89,18 @@ class DeliveryService:
 
         for delivery in self.repository.get_all():
             if delivery.order.order_id == order_id:
+
+                if new_status.strip().lower() == "завершён":
+                    self.repository.get_all().remove(delivery)
+
+                    try:
+                        self.repository.save()
+                    except OSError:
+                        self.repository.add(delivery)
+                        raise
+
+                    return "deleted"
+
                 old_status = delivery.status
                 delivery.update_status(new_status.strip())
 
@@ -97,5 +109,7 @@ class DeliveryService:
                 except OSError:
                     delivery.update_status(old_status)
                     raise
-                return True
+
+                return "updated"
+
         return False

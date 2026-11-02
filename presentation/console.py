@@ -5,6 +5,29 @@ class Console:
     def __init__(self, delivery_service):
         self.delivery_service = delivery_service
 
+    def get_required_text(self, message):
+        while True:
+            value = input(message).strip()
+
+            if value:
+                return value
+
+            print("Поле не может быть пустым")
+
+    def get_integer(self, message):
+        while True:
+            try:
+                value = int(input(message))
+
+                if value <= 0:
+                    print("Число должно быть больше нуля")
+                    continue
+
+                return value
+
+            except ValueError:
+                print("Введите целое число")
+
     def show_menu(self):
         print("\n=== СЕРВИС ДОСТАВКИ ===")
         print("1. Показать все доставки")
@@ -28,18 +51,20 @@ class Console:
             print(f"Не удалось получить доставки: {error}")
 
     def update_status(self):
-        order_id = int(input("Введите номер заказа: "))
-        new_status = int(input("Введите новый статус: "))
+        order_id = self.get_integer("Введите номер заказа: ")
+        new_status = self.get_required_text("Введите новый статус: ")
 
         try:
             result = self.delivery_service.update_delivery_status(
                 order_id, new_status
             )
 
-            if result:
+            if result == "deleted":
+                print("Доставка завершена!")
+            elif result == "updated":
                 print("Статус успешно изменён!")
             else:
-                print("Ошибка: доставка не найдена.")
+                print("Ошибка: доставка не найдена")
 
         except (ValueError, OSError) as error:
             print(f"Не удалось изменить статус: {error}")
@@ -92,7 +117,7 @@ class Console:
                 elif choice == "2":
                     self.update_status()
                 elif choice == "3":
-                    self.show_deliveries()
+                    self.create_delivery()
                 elif choice == "0":
                     print("Программа завершена")
                     break
