@@ -19,47 +19,60 @@ class JsonRepository(Repository):
         self._load()
 
     def _load(self):
-
         if not self.file_path.exists():
             return
 
-        with open(self.file_path, "r", encoding="utf-8") as file:
-            data = json.load(file)
+        try:
+            with open(self.file_path, "r", encoding="utf-8") as file:
+                data = json.load(file)
 
-        for item in data:
-            customer = Customer(
-                item["customer"]["name"],
-                item["customer"]["phone"]
-            )
+        except json.JSONDecodeError as error:
+            raise ValueError(
+                f"Файл {self.file_path} содержит некорректный JSON"
+            ) from error
 
-            courier = Courier(
-                item["courier"]["name"],
-                item["courier"]["phone"],
-                item["courier"]["vehicle"]
-            )
+        if not isinstance(data, list):
+            raise ValueError("В JSON-файле ожидался список доставок")
 
-            address = Address(
-                item["address"]["city"],
-                item["address"]["street"],
-                item["address"]["house"]
-            )
+        try:
+            for item in data:
+                customer = Customer(
+                    item["customer"]["name"],
+                    item["customer"]["phone"]
+                )
 
-            package = Package(
-                item["package"]["description"],
-                item["package"]["weight"]
-            )
+                courier = Courier(
+                    item["courier"]["name"],
+                    item["courier"]["phone"],
+                    item["courier"]["vehicle"]
+                )
 
-            order = Order(
-                item["order_id"],
-                customer,
-                package
-            )
+                address = Address(
+                    item["address"]["city"],
+                    item["address"]["street"],
+                    item["address"]["house"]
+                )
 
-            delivery = Delivery(order, courier, address)
+                package = Package(
+                    item["package"]["description"],
+                    item["package"]["weight"]
+                )
 
-            delivery.status = item["status"]
+                order = Order(
+                    item["order_id"],
+                    customer,
+                    package
+                )
 
-            self.deliveries.append(delivery)
+                delivery = Delivery(order, courier, address)
+
+                delivery.status = item["status"]
+
+                self.deliveries.append(delivery)
+        except (KeyError, TypeError, ValueError) as error:
+            raise ValueError(
+                "В JSON-файле обнаружены некорректные данные доставки"
+            ) from error
 
     def get_all(self):
         return self.deliveries
