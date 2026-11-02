@@ -1,0 +1,46 @@
+[
+    {
+        "order_id": 1,
+        "customer": {
+            "name": "А",
+            "phone": "+79871234567"
+        },
+        "courier": {
+            "name": "B",
+            "phone": "+77897654321",
+            "vehicle": "Вело"
+        },
+        "address": {
+            "city": "Москва",
+            "street": "АБ",
+            "house": "1"
+        },
+        "package": {
+            "description": "Ноутбук",
+            "weight": 2.5
+        },
+        "status": "Ожидает отправки"
+    },
+    {
+        "order_id": 1,
+        "customer": {
+            "name": "А",
+            "phone": "+79871234567"
+        },
+        "courier": {
+            "name": "B",
+            "phone": "+77897654321",
+            "vehicle": "Вело"
+        },
+        "address": {
+            "city": "Москва",
+            "street": "АБ",
+            "house": "1"
+        },
+        "package": {
+            "description": "Ноутбук",
+            "weight": 2.5
+        },
+        "status": "Ожидает отправки"
+    }
+]
