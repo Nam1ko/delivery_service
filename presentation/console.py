@@ -1,6 +1,3 @@
-from domain.delivery import Delivery
-
-
 class Console:
     def __init__(self, delivery_service):
         self.delivery_service = delivery_service

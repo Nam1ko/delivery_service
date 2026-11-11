@@ -1,7 +1,3 @@
-from domain.order import Order
-from domain.courier import Courier
-from domain.address import Address
-
 class Delivery:
 
     def __init__(self, order, courier, address):

@@ -1,6 +1,3 @@
-from domain.customer import Customer
-from domain.package import Package
-
 class Order:
 
     def __init__(self, order_id, customer, package):
